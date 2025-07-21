@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import readingTime from 'reading-time'
 
 const title = 'About';
-const description = 'About your blog.';
+const description = 'About Jake Waggoner';
 const permalink = `${Astro.site.href}about`;
 ---
 
@@ -10,21 +11,47 @@ const permalink = `${Astro.site.href}about`;
   <div class="container">
     <h1>About</h1>
     <figure class="about-image">
-      <img src="/assets/about-illustration.webp" alt="Illustration of a notebook" width="330">
+      <img src="/assets/myself.jpg" alt="Illustration of a notebook" width="330">
       <figcaption>
-        Illustration by
-        <a href="https://icons8.com/illustrations/author/5c07e68d82bcbc0092519bb6" target="_blank" rel="noopener">Icons 8</a>
-        from
-        <a href="https://icons8.com/illustrations" target="_blank" rel="noopener">Ouch!</a>
+        Picture of myself, Jake Waggoner
       </figcaption>
     </figure>
-    <p>Text placeholder via <a href="https://jeffsum.com/" target="_blank">Jeffsum</a>.</p>
-    <p>So you two dig up, dig up dinosaurs? What do they got in there? King Kong? My dad once told me, laugh and the world laughs with you, Cry, and I'll give you something to cry about you little bastard! Life finds a way. God creates dinosaurs. God destroys dinosaurs. God creates Man. Man destroys God. Man creates Dinosaurs.</p>
-    <p>You really think you can fly that thing? You know what? It is beets. I've crashed into a beet truck. Forget the fat lady! You're obsessed with the fat lady! Drive us out of here! Is this my espresso machine? Wh-what is-h-how did you get my espresso machine?</p>
-    <p>Hey, you know how I'm, like, always trying to save the planet? Here's my chance. Hey, take a look at the earthlings. Goodbye! I was part of something special. Just my luck, no ice. You're a very talented young man, with your own clever thoughts and ideas. Do you need a manager?</p>
-    <p>Jaguar shark! So tell me - does it really exist? This thing comes fully loaded. AM/FM radio, reclining bucket seats, and... power windows. Yes, Yes, without the oops! You're a very talented young man, with your own clever thoughts and ideas. Do you need a manager?</p>
-    <p>Yes, Yes, without the oops! Do you have any idea how long it takes those cups to decompose. They're using our own satellites against us. And the clock is ticking. Do you have any idea how long it takes those cups to decompose. My dad once told me, laugh and the world laughs with you, Cry, and I'll give you something to cry about you little bastard!</p>
+    <p>Hello! I am Jake Waggoner and welcome to my blog! This is a space I created to allow me to share my own thoughts, opinions, things I'm actively doing, and any life updates. I live in Indiana, am married to a wonderful woman named Mercedes, have a son named Wesley, and a tuxedo cat named Samp.</p>
+    <p>I am currently a senior software engineer and have been in the industry since 2019. I started off as an intern at Ontario Systems (now called Finvi) and then once I graduated college in 2021 I joined Encora (previously DMI) as a consultant and have been there ever since. My work includes migrating legacy APIs and creating new ones at Volkswagen Credit and migrating Heroku sites to AWS at Eli Lilly.</p>
+    <p>My wife and I bought our home in 2023, and ever since, I have always been busy either adding something new, fixing something broken, or adjusting something out of place to make our lives more comfortable; so expect to see a lot of DIY/woodworking posts on this site. I also plan on adding technical think pieces, opinions, and tips I have gathered throughout the years.</p>
+    
+    <h2>Connect with me</h2>
+    <ul>
+      <li>
+        <a href="https://www.instagram.com/iamjakewaggoner/">Instagram</a>
+      </li>
+      <li>
+        <a href="https://www.x.com/jake_waggoner/">Twitter/X</a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/waggonerjake">LinkedIn</a>
+      </li>
+      <li>
+        <a href="https://github.com/waggonerjake">GitHub</a>
+      </li>
+    </ul>
+    <h2>Stuff I like</h2>
+    <ul>
+      <li>
+        <a href="https://rocketleague.tracker.network/rocket-league/profile/steam/76561198407262352/overview">Rocket League</a>
+      </li>
+      <li>
+        <a href="https://open.spotify.com/playlist/2A9XONsXFZF8FbeovAU8i0?si=75860ba49d334582">My favorite songs on Spotify</a>
+      </li>
+      <li>
+        <a href="https://en.wikipedia.org/wiki/Talladega_Nights:_The_Ballad_of_Ricky_Bobby">The best movie of all time</a>
+      </li>
+      <li>
+        <a href="https://www.olivegarden.com/home">My favorite resturant</a>
+      </li>
+    </ul>
   </div>
+</div>
 </BaseLayout>
 
 <style>
