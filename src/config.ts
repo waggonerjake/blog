@@ -4,7 +4,7 @@ export const SITE = {
   profile: "https://jakewaggoner.com/",
   desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
   title: "Jake Waggoner",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "large-logo.png",
   lightAndDarkMode: true,
   postPerIndex: 4,
   postPerPage: 4,
