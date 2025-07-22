@@ -13,6 +13,8 @@ export const SITE = {
   showBackButton: true, // show back button in post detail
   editPost: {
     enabled: false,
+    text: "",
+    url: "",
   },
   dynamicOgImage: true,
   dir: "ltr", // "rtl" | "auto"
