@@ -1,0 +1,105 @@
+---
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Layout from "@/layouts/Layout.astro";
+import { SITE } from "@/config";
+
+export interface Props {
+  frontmatter: {
+    title: string;
+    description?: string;
+  };
+}
+---
+
+<Layout title={`About | ${SITE.title}`}>
+  <Header />
+  <Breadcrumb />
+  <main id="main-content">
+    <section id="about" class="app-prose mb-28 max-w-app prose-img:border-0">
+      <h1 class="text-2xl tracking-wider sm:text-3xl">About</h1>
+      <div class="flex flex-col-reverse items-start gap-6 md:flex-row">
+        <div id="text-content" class="md:w-1/2">
+          <p>
+            Hello! I am Jake Waggoner and welcome to my blog! This is a space I
+            created to allow me to share my own thoughts, opinions, things I'm
+            actively doing, and any life updates. I live in Indiana, am married
+            to a wonderful woman named Mercedes, have a son named Wesley, and a
+            tuxedo cat named Samp.
+          </p>
+          <p>
+            I am currently a senior software engineer and have been in the
+            industry since 2019. I started off as an intern at Ontario Systems
+            (now called Finvi) and then once I graduated college in 2021 I
+            joined DMI (now part of Encora) as a consultant and have been there
+            ever since. My work includes migrating legacy APIs and creating new
+            ones at Volkswagen Credit and migrating Heroku sites to AWS at Eli
+            Lilly.
+          </p>
+          <p>
+            My wife and I bought our home in 2023, and ever since, I have always
+            been busy either adding something new, fixing something broken, or
+            adjusting something out of place to make our lives more comfortable;
+            so expect to see a lot of DIY/woodworking posts on this site. I also
+            plan on adding technical think pieces, opinions, and tips I have
+            gathered throughout the years as well as general life
+            updates/topics.
+          </p>
+        </div>
+        <div id="image-container" class="flex justify-center md:w-1/2">
+          <img
+            src="/assets/myself.jpg"
+            alt="Myself"
+            class="h-auto w-full max-w-sm object-contain"
+          />
+        </div>
+      </div>
+      <h2>Connect with me</h2>
+      <p>Below are all the ways you can connect with me:</p>
+      <ul>
+        <li>
+          <a href="https://www.instagram.com/iamjakewaggoner/">Instagram</a>
+        </li>
+        <li><a href="https://www.x.com/jake_waggoner/">Twitter/X</a></li>
+        <li><a href="https://www.linkedin.com/in/waggonerjake">LinkedIn</a></li>
+        <li><a href="https://github.com/waggonerjake">GitHub</a></li>
+      </ul>
+      <h2 id="stuff-i-like">Stuff I like</h2>
+      <ul>
+        <li>
+          <a
+            href="https://rocketleague.tracker.network/rocket-league/profile/steam/76561198407262352/overview"
+            >Rocket League</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://open.spotify.com/playlist/2A9XONsXFZF8FbeovAU8i0?si=75860ba49d334582"
+            >My favorite Spotify Songs</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://en.wikipedia.org/wiki/Talladega_Nights:_The_Ballad_of_Ricky_Bobby"
+            >The best movie of all time</a
+          >
+        </li>
+        <li>
+          <a href="https://www.olivegarden.com/home">My favorite resturant</a>
+        </li>
+      </ul>
+    </section>
+    <script is:inline>
+      window.addEventListener("DOMContentLoaded", () => {
+        const textContent = document.getElementById("text-content");
+        const image = document.querySelector("#image-container img");
+
+        if (textContent && image) {
+          image.style.height = `${textContent.offsetHeight}px`;
+        }
+      });
+    </script>
+  </main>
+  <Footer />
+</Layout>
