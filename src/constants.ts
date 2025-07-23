@@ -7,6 +7,7 @@ import IconWhatsapp from "@/assets/icons/IconWhatsapp.svg";
 import IconFacebook from "@/assets/icons/IconFacebook.svg";
 import IconTelegram from "@/assets/icons/IconTelegram.svg";
 import IconPinterest from "@/assets/icons/IconPinterest.svg";
+import IconInstagram from "@/assets/icons/IconInstragram.svg";
 import { SITE } from "@/config";
 
 interface Social {
@@ -36,20 +37,14 @@ export const SOCIALS: Social[] = [
     icon: IconLinkedin,
   },
   {
-    name: "Mail",
-    href: "mailto:yourmail@gmail.com",
-    linkTitle: `Send an email to ${SITE.title}`,
-    icon: IconMail,
+    name: "Instagram",
+    href: "https://www.instagram.com/iamjakewaggoner/",
+    linkTitle: `${SITE.title} on Instagram`,
+    icon: IconInstagram,
   },
 ] as const;
 
 export const SHARE_LINKS: Social[] = [
-  {
-    name: "WhatsApp",
-    href: "https://wa.me/?text=",
-    linkTitle: `Share this post via WhatsApp`,
-    icon: IconWhatsapp,
-  },
   {
     name: "Facebook",
     href: "https://www.facebook.com/sharer.php?u=",
@@ -61,18 +56,6 @@ export const SHARE_LINKS: Social[] = [
     href: "https://x.com/intent/post?url=",
     linkTitle: `Share this post on X`,
     icon: IconBrandX,
-  },
-  {
-    name: "Telegram",
-    href: "https://t.me/share/url?url=",
-    linkTitle: `Share this post via Telegram`,
-    icon: IconTelegram,
-  },
-  {
-    name: "Pinterest",
-    href: "https://pinterest.com/pin/create/button/?url=",
-    linkTitle: `Share this post on Pinterest`,
-    icon: IconPinterest,
   },
   {
     name: "Mail",
