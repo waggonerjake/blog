@@ -46,6 +46,44 @@ export interface Props {
             gathered throughout the years as well as general life
             updates/topics.
           </p>
+          <h2>Connect with me</h2>
+          <p>Below are all the ways you can connect with me:</p>
+          <ul>
+            <li>
+              <a href="https://www.instagram.com/iamjakewaggoner/">Instagram</a>
+            </li>
+            <li><a href="https://www.x.com/jake_waggoner/">Twitter/X</a></li>
+            <li>
+              <a href="https://www.linkedin.com/in/waggonerjake">LinkedIn</a>
+            </li>
+            <li><a href="https://github.com/waggonerjake">GitHub</a></li>
+          </ul>
+          <h2 id="stuff-i-like">Stuff I like</h2>
+          <ul>
+            <li>
+              <a
+                href="https://rocketleague.tracker.network/rocket-league/profile/steam/76561198407262352/overview"
+                >Rocket League</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://open.spotify.com/playlist/2A9XONsXFZF8FbeovAU8i0?si=75860ba49d334582"
+                >My favorite Spotify Songs</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://en.wikipedia.org/wiki/Talladega_Nights:_The_Ballad_of_Ricky_Bobby"
+                >The best movie of all time</a
+              >
+            </li>
+            <li>
+              <a href="https://www.olivegarden.com/home"
+                >My favorite resturant</a
+              >
+            </li>
+          </ul>
         </div>
         <div id="image-container" class="flex justify-center md:w-1/2">
           <img
@@ -55,51 +93,7 @@ export interface Props {
           />
         </div>
       </div>
-      <h2>Connect with me</h2>
-      <p>Below are all the ways you can connect with me:</p>
-      <ul>
-        <li>
-          <a href="https://www.instagram.com/iamjakewaggoner/">Instagram</a>
-        </li>
-        <li><a href="https://www.x.com/jake_waggoner/">Twitter/X</a></li>
-        <li><a href="https://www.linkedin.com/in/waggonerjake">LinkedIn</a></li>
-        <li><a href="https://github.com/waggonerjake">GitHub</a></li>
-      </ul>
-      <h2 id="stuff-i-like">Stuff I like</h2>
-      <ul>
-        <li>
-          <a
-            href="https://rocketleague.tracker.network/rocket-league/profile/steam/76561198407262352/overview"
-            >Rocket League</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://open.spotify.com/playlist/2A9XONsXFZF8FbeovAU8i0?si=75860ba49d334582"
-            >My favorite Spotify Songs</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://en.wikipedia.org/wiki/Talladega_Nights:_The_Ballad_of_Ricky_Bobby"
-            >The best movie of all time</a
-          >
-        </li>
-        <li>
-          <a href="https://www.olivegarden.com/home">My favorite resturant</a>
-        </li>
-      </ul>
     </section>
-    <script is:inline>
-      window.addEventListener("DOMContentLoaded", () => {
-        const textContent = document.getElementById("text-content");
-        const image = document.querySelector("#image-container img");
-
-        if (textContent && image) {
-          image.style.height = `${textContent.offsetHeight}px`;
-        }
-      });
-    </script>
   </main>
   <Footer />
 </Layout>
