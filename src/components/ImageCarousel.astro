@@ -1,0 +1,106 @@
+---
+// ImageCarousel.astro
+export interface Props {
+  images: string[];
+  altTexts?: string[];
+}
+const { images, altTexts = [] } = Astro.props;
+---
+
+<div
+  class="relative mx-auto w-full max-w-2xl overflow-hidden rounded shadow-lg"
+>
+  <!-- Carousel Track -->
+  <div
+    class="flex transition-transform duration-500 ease-in-out"
+    id="carousel-track"
+  >
+    {
+      images.map((src, i) => (
+        <img
+          src={src}
+          alt={altTexts[i] ?? `Slide ${i + 1}`}
+          class="h-auto w-full min-w-full object-contain sm:h-128"
+          loading="lazy"
+        />
+      ))
+    }
+  </div>
+
+  <!-- Arrows -->
+  <button
+    id="prev"
+    class="absolute top-1/2 left-2 z-10 -translate-y-1/2 rounded bg-black/40 px-2 py-1 text-white"
+  >
+    &#10094;
+  </button>
+  <button
+    id="next"
+    class="absolute top-1/2 right-2 z-10 -translate-y-1/2 rounded bg-black/40 px-2 py-1 text-white"
+  >
+    &#10095;
+  </button>
+
+  <!-- Indicators -->
+  <div
+    class="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 space-x-2"
+    id="carousel-indicators"
+  >
+    {
+      images.map((_, i) => (
+        <button
+          class="bg[rgba(var(--accent-rgb),0.5)] h-3 w-3 rounded-full transition hover:bg-(--accent)"
+          data-index={i}
+          aria-label={`Slide ${i + 1}`}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<script type="module">
+  const track = document.querySelector("#carousel-track");
+  const prev = document.querySelector("#prev");
+  const next = document.querySelector("#next");
+  const indicators = document.querySelectorAll("#carousel-indicators button");
+  const slides = track.querySelectorAll("img");
+
+  let index = 0;
+
+  function updateCarousel() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    indicators.forEach((dot, i) => {
+      dot.classList.toggle("bg-(--accent)", i === index);
+      dot.classList.toggle("bg-[rgba(var(--accent-rgb),0.5)]", i !== index);
+    });
+  }
+
+  next.addEventListener("click", () => {
+    index = (index + 1) % slides.length;
+    updateCarousel();
+  });
+
+  prev.addEventListener("click", () => {
+    index = (index - 1 + slides.length) % slides.length;
+    updateCarousel();
+  });
+
+  indicators.forEach(dot => {
+    dot.addEventListener("click", () => {
+      index = parseInt(dot.dataset.index);
+      updateCarousel();
+    });
+  });
+
+  // Touch swipe
+  let startX = 0;
+  track.addEventListener("touchstart", e => (startX = e.touches[0].clientX));
+  track.addEventListener("touchend", e => {
+    const endX = e.changedTouches[0].clientX;
+    if (startX - endX > 50) next.click();
+    else if (endX - startX > 50) prev.click();
+  });
+
+  // Init
+  updateCarousel();
+</script>

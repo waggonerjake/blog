@@ -5,6 +5,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Tag from "@/components/Tag.astro";
 import Datetime from "@/components/Datetime.astro";
+import ReadingTime from "@/components/ReadingTime.astro";
 import EditPost from "@/components/EditPost.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
@@ -14,6 +15,7 @@ import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
 import { SITE } from "@/config";
+import readingTime from "reading-time";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -34,6 +36,8 @@ const {
   tags,
   hideEditPost,
 } = post.data;
+
+const readingTimeEstimate = readingTime(post.body || "").text;
 
 const { Content } = await render(post);
 
@@ -101,6 +105,7 @@ const nextPost =
     </h1>
     <div class="my-2 flex items-center gap-2">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
+      <ReadingTime {readingTimeEstimate} />
       <span
         aria-hidden="true"
         class:list={[
@@ -110,6 +115,7 @@ const nextPost =
       >
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
+    <div class="my-2 flex items-center gap-2"></div>
     <article
       id="article"
       class="app-prose mx-auto mt-8 max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
