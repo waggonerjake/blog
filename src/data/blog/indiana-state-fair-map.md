@@ -1,6 +1,6 @@
 ---
 author: Jake Waggoner
-pubDatetime: 2025-07-25T20:33:26.000-04:00
+pubDatetime: 2025-07-25T23:31:19
 modDatetime:
 title: Indiana State Fair Food Vendor Map
 featured: true
