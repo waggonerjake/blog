@@ -5,15 +5,16 @@ export interface Props {
   altTexts?: string[];
 }
 const { images, altTexts = [] } = Astro.props;
+const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
 ---
 
 <div
-  class="relative mx-auto w-full max-w-2xl overflow-hidden rounded shadow-lg"
+  class="relative mx-auto w-full max-w-xl overflow-hidden rounded shadow-lg"
 >
   <!-- Carousel Track -->
   <div
     class="flex transition-transform duration-500 ease-in-out"
-    id="carousel-track"
+    id={`${carouselId}-track`}
   >
     {
       images.map((src, i) => (
@@ -29,13 +30,13 @@ const { images, altTexts = [] } = Astro.props;
 
   <!-- Arrows -->
   <button
-    id="prev"
+    id={`${carouselId}-prev`}
     class="absolute top-1/2 left-2 z-10 -translate-y-1/2 rounded bg-black/40 px-2 py-1 text-white"
   >
     &#10094;
   </button>
   <button
-    id="next"
+    id={`${carouselId}-next`}
     class="absolute top-1/2 right-2 z-10 -translate-y-1/2 rounded bg-black/40 px-2 py-1 text-white"
   >
     &#10095;
@@ -44,7 +45,7 @@ const { images, altTexts = [] } = Astro.props;
   <!-- Indicators -->
   <div
     class="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 space-x-2"
-    id="carousel-indicators"
+    id={`${carouselId}-indicators`}
   >
     {
       images.map((_, i) => (
@@ -58,49 +59,57 @@ const { images, altTexts = [] } = Astro.props;
   </div>
 </div>
 
-<script type="module">
-  const track = document.querySelector("#carousel-track");
-  const prev = document.querySelector("#prev");
-  const next = document.querySelector("#next");
-  const indicators = document.querySelectorAll("#carousel-indicators button");
-  const slides = track.querySelectorAll("img");
+<script is:inline define:vars={{ carouselId }}>
+  // Wrap in a function to avoid conflicts
+  (function initCarousel() {
+    const track = document.querySelector(`#${carouselId}-track`);
+    const prev = document.querySelector(`#${carouselId}-prev`);
+    const next = document.querySelector(`#${carouselId}-next`);
+    const indicators = document.querySelectorAll(`#${carouselId}-indicators button`);
+    const slides = track?.querySelectorAll("img");
 
-  let index = 0;
+    // Exit if elements don't exist
+    if (!track || !prev || !next || !indicators.length || !slides?.length) {
+      return;
+    }
 
-  function updateCarousel() {
-    track.style.transform = `translateX(-${index * 100}%)`;
-    indicators.forEach((dot, i) => {
-      dot.classList.toggle("bg-(--accent)", i === index);
-      dot.classList.toggle("bg-[rgba(var(--accent-rgb),0.5)]", i !== index);
-    });
-  }
+    let index = 0;
 
-  next.addEventListener("click", () => {
-    index = (index + 1) % slides.length;
-    updateCarousel();
-  });
+    function updateCarousel() {
+      track.style.transform = `translateX(-${index * 100}%)`;
+      indicators.forEach((dot, i) => {
+        dot.classList.toggle("bg-(--accent)", i === index);
+        dot.classList.toggle("bg-[rgba(var(--accent-rgb),0.5)]", i !== index);
+      });
+    }
 
-  prev.addEventListener("click", () => {
-    index = (index - 1 + slides.length) % slides.length;
-    updateCarousel();
-  });
-
-  indicators.forEach(dot => {
-    dot.addEventListener("click", () => {
-      index = parseInt(dot.dataset.index);
+    next.addEventListener("click", () => {
+      index = (index + 1) % slides.length;
       updateCarousel();
     });
-  });
 
-  // Touch swipe
-  let startX = 0;
-  track.addEventListener("touchstart", e => (startX = e.touches[0].clientX));
-  track.addEventListener("touchend", e => {
-    const endX = e.changedTouches[0].clientX;
-    if (startX - endX > 50) next.click();
-    else if (endX - startX > 50) prev.click();
-  });
+    prev.addEventListener("click", () => {
+      index = (index - 1 + slides.length) % slides.length;
+      updateCarousel();
+    });
 
-  // Init
-  updateCarousel();
+    indicators.forEach(dot => {
+      dot.addEventListener("click", () => {
+        index = parseInt(dot.dataset.index);
+        updateCarousel();
+      });
+    });
+
+    // Touch swipe
+    let startX = 0;
+    track.addEventListener("touchstart", e => (startX = e.touches[0].clientX));
+    track.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+      if (startX - endX > 50) next.click();
+      else if (endX - startX > 50) prev.click();
+    });
+
+    // Init
+    updateCarousel();
+  })();
 </script>
