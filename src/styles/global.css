@@ -10,7 +10,7 @@ html[data-theme="light"] {
   --accent: #006cac;
   --accent-rgb: 0, 108, 172;
   --muted: #e6e6e6;
-  --border: #ece9e9;
+  --border: #006cac;
 }
 
 html[data-theme="dark"] {

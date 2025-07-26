@@ -44,7 +44,11 @@
     }
 
     img {
-      @apply mx-auto border border-border;
+      @apply mx-auto border-[3px] border-border;
+    }
+
+    iframe {
+      @apply border-[3px];
     }
 
     figcaption {
