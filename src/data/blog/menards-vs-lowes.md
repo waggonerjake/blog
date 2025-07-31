@@ -77,6 +77,6 @@ Personally, I enjoy shopping at Menards more than Lowe's. Menards has music play
 
 Lowe's biggest selling point and the main reason I go there is because they have an indoor lumber yard. I can get 8ft 2x4s inside the store rather than going outside and walking a far distance. I can simply load the flatbed cart from within the comfort of the store and check out at the lumber cashier and well it out to my car. This allows me to get the quality lumber I want without having to go through the hassle of going all the way outside to load it assuming they have acceptable pieces. This is where Lowe's shines in terms of shopping experience. If I need to get any lumber that is outside at Menards, I first check if Lowe's has it and if they do, I buy it there instead. Lowe's also has user reviews which makes buying things online feel safer as you can see what others have said or ask questions. This makes a huge difference for people that buy online-only items.
 
-This lumber buying experience is such a big deal to me and the user reviews for online shopping, I have to give this Lowe's. 
+Due to lumber buying experience being such a big deal to me and having user reviews/Q&A for online shopping, I have to give this Lowe's.
 
 **Winner: Lowe's**
