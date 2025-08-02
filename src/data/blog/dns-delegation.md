@@ -1,13 +1,12 @@
 ---
 author: Jake Waggoner
 pubDatetime: 2025-07-29T19:43:12.000-04:00
-modDatetime:
+modDatetime: 2025-08-01T22:32:02
 title: DNS Delegation Explained
 featured: false
 draft: false
 tags:
   - tech
-  - tips
 description: A explanation of DNS delegation
 ---
 
