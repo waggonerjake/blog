@@ -1,9 +1,9 @@
 ---
 author: Jake Waggoner
 pubDatetime: 2025-07-25T23:31:19
-modDatetime:
+modDatetime: 2025-08-03T00:28:40
 title: Vercel vs AWS Blog Hosting
-featured: true
+featured: false
 draft: false
 tags:
   - tech
