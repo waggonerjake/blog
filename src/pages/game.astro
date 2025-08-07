@@ -12,7 +12,7 @@ export interface Props {
 ---
 
 <Layout title={`Game | ${SITE.title}`}>
-  <Breadcrumb />
+  <Breadcrumb class="font-bold" />
   <div class="game-container">
     <h1>🏠 What's In My House?</h1>
     <p class="subtitle">Guess the household item with progressive hints!</p>
@@ -81,7 +81,8 @@ export interface Props {
     width: 90%;
     text-align: center;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto; /* Make entire container scrollable */
+    max-height: 90vh; /* Prevent container from growing too large */
   }
 
   .game-container::before {
@@ -161,14 +162,15 @@ export interface Props {
     margin-bottom: 0;
   }
 
-  .missed-letter {
-    color: #e53e3e;
-    font-weight: bold;
+  /* Fixed CSS classes - moved outside of any nested selectors and made more specific */
+  :global(.missed-letter) {
+    color: #e53e3e !important;
+    font-weight: bold !important;
   }
 
-  .correct-letter {
-    color: #28c73d;
-    font-weight: bold;
+  :global(.correct-letter) {
+    color: #28c73d !important;
+    font-weight: bold !important;
   }
 
   .input-section {
@@ -248,6 +250,11 @@ export interface Props {
     text-align: left;
   }
 
+  /* Remove scrolling from guesses container - let the whole game container scroll */
+  #guessesContainer {
+    margin-top: 10px;
+  }
+
   .guess-item {
     padding: 8px;
     margin: 5px 0;
@@ -264,19 +271,24 @@ export interface Props {
     margin: 20px 0;
   }
 
-  .win-message {
+  :global(.win-message) {
     background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
     color: #22543d;
+    border-radius: 5px;
+    padding: 20px;
   }
 
-  .lose-message {
+  :global(.lose-message) {
     background: linear-gradient(135deg, #fed7d7, #feb2b2);
     color: #742a2a;
+    border-radius: 5px;
+    padding: 20px;
   }
 
   @media (max-width: 600px) {
     .game-container {
       padding: 20px;
+      max-height: 95vh; /* Slightly higher on mobile */
     }
 
     .word-display {
@@ -299,8 +311,9 @@ export interface Props {
   let currentHintIndex = 0;
   let gameOver = false;
   let previousGuesses: any[] = [];
-  let hasPlayedToday = false;
   let revealedLetters: any[] = [];
+  let gameInitialized = false;
+  let wordFetched = false; // Flag to prevent multiple API calls
 
   // Get today's date string for comparison
   function getTodayDateString() {
@@ -321,11 +334,10 @@ export interface Props {
       hintsRemaining = state.hintsRemaining;
       currentHintIndex = state.currentHintIndex;
       gameOver = state.gameOver;
-      previousGuesses = state.previousGuesses;
+      previousGuesses = state.previousGuesses || []; // Fixed: ensure array fallback
       revealedLetters =
         state.revealedLetters ||
         new Array(state.currentItem.word.length).fill(false);
-      hasPlayedToday = true;
       return true;
     }
     return false;
@@ -360,28 +372,59 @@ export interface Props {
   }
 
   async function initGame() {
+    // Prevent multiple initializations
+    if (gameInitialized) {
+      return;
+    }
+
     // Check if user already played today
     if (checkDailyPlayStatus()) {
       // Restore previous game state
       updateWordDisplay();
       updateStats();
       updateHint();
-      updateGuessesList();
+
+      // Show guesses list if there are previous guesses
+      if (previousGuesses && previousGuesses.length > 0) {
+        const guessesList = document.getElementById("guessesList");
+        if (guessesList) {
+          guessesList.style.display = "block";
+        }
+        updateGuessesList();
+      }
 
       if (gameOver) {
-        if (previousGuesses.includes(currentItem.word)) {
+        if (previousGuesses.some(guess => guess === currentItem.word)) {
           winGame();
         } else {
           loseGame();
         }
-      }
+      } else {
+        // If game is not over, don't call updateUI() which hides the guesses
+        const guessInput = document.getElementById(
+          "guessInput"
+        ) as HTMLInputElement;
+        const guessButton = document.getElementById(
+          "guessButton"
+        ) as HTMLButtonElement;
 
-      updateUI();
+        if (guessInput) {
+          guessInput.disabled = false;
+          guessInput.focus();
+        }
+        if (guessButton) {
+          guessButton.disabled = false;
+        }
+      }
+      gameInitialized = true;
       return;
     }
 
-    // Get today's word
-    currentItem = await fetchTodaysWord();
+    // Only fetch word if we haven't already
+    if (!wordFetched) {
+      currentItem = await fetchTodaysWord();
+      wordFetched = true;
+    }
 
     // Reset game state for new day
     guessesRemaining = 6;
@@ -389,18 +432,21 @@ export interface Props {
     currentHintIndex = 0;
     gameOver = false;
     previousGuesses = [];
-    hasPlayedToday = false;
     revealedLetters = new Array(currentItem.word.length).fill(false);
+
+    saveDailyGameState();
 
     // Update display
     updateWordDisplay();
     updateStats();
     updateHint();
     updateUI();
+
+    gameInitialized = true;
   }
 
   function updateUI() {
-    // Clear previous game elements
+    // Clear previous game elements only for new games
     const guessInput = document.getElementById(
       "guessInput"
     ) as HTMLInputElement;
@@ -414,12 +460,17 @@ export interface Props {
     if (gameMessage) {
       gameMessage.innerHTML = "";
     }
-    if (guessesList) {
-      guessesList.style.display = "none";
+
+    // Only hide guesses list and clear container for completely new games
+    if (previousGuesses.length === 0) {
+      if (guessesList) {
+        guessesList.style.display = "none";
+      }
+      if (guessesContainer) {
+        guessesContainer.innerHTML = "";
+      }
     }
-    if (guessesContainer) {
-      guessesContainer.innerHTML = "";
-    }
+
     if (guessInput) {
       guessInput.disabled = gameOver;
       guessInput.value = "";
@@ -525,7 +576,6 @@ export interface Props {
       revealedLetters = new Array(currentItem.word.length).fill(true);
       updateWordDisplay();
       winGame();
-      hasPlayedToday = true;
       saveDailyGameState();
       return;
     }
@@ -551,7 +601,6 @@ export interface Props {
     // Check if game over
     if (guessesRemaining === 0) {
       loseGame();
-      hasPlayedToday = true;
       saveDailyGameState();
       return;
     }
@@ -580,7 +629,7 @@ export interface Props {
     updateWordDisplay();
     const gameMessage = document.getElementById("gameMessage");
     if (gameMessage) {
-      gameMessage.innerHTML = `<div class="win-message">🎉 Congratulations! You guessed "${currentItem.word}" correctly!</div>`;
+      gameMessage.innerHTML = `<div class="win-message">🎉 Congratulations! You guessed <div style="font-weight:bold">${currentItem.word}</div> correctly! Come back tomorrow to guess again!</div>`;
     }
     const guessInput = document.getElementById(
       "guessInput"
@@ -589,11 +638,11 @@ export interface Props {
       guessInput.disabled = true;
     }
 
-    const guessButon = document.getElementById(
+    const guessButton = document.getElementById(
       "guessButton"
     ) as HTMLInputElement | null;
-    if (guessButon) {
-      guessButon.disabled = true;
+    if (guessButton) {
+      guessButton.disabled = true;
     }
   }
 
@@ -603,7 +652,7 @@ export interface Props {
     updateWordDisplay(); // This will show missed letters in red
     const gameMessage = document.getElementById("gameMessage");
     if (gameMessage) {
-      gameMessage.innerHTML = `<div class="lose-message">😔 Game Over! The answer was "${currentItem.word}". Come back tomorrow for a new word!</div>`;
+      gameMessage.innerHTML = `<div class="lose-message">😔 Game Over! The answer was <div style="font-weight:bold">${currentItem.word}</div> Come back tomorrow for a new word!</div>`;
     }
 
     const guessInput = document.getElementById(
@@ -613,31 +662,64 @@ export interface Props {
       guessInput.disabled = true;
     }
 
-    const guessButon = document.getElementById(
+    const guessButton = document.getElementById(
       "guessButton"
     ) as HTMLInputElement | null;
-    if (guessButon) {
-      guessButon.disabled = true;
+    if (guessButton) {
+      guessButton.disabled = true;
     }
   }
 
-  // Add event listeners after DOM loads
-  document.addEventListener("DOMContentLoaded", function () {
+  function initializeGame() {
+    // Check if the required elements exist (page is actually loaded)
+    const guessInput = document.getElementById("guessInput");
+    const guessButton = document.getElementById("guessButton");
+
+    if (!guessInput || !guessButton) {
+      // Elements not ready yet, try again shortly
+      setTimeout(initializeGame, 100);
+      return;
+    }
+
+    // Prevent multiple initializations
+    if (gameInitialized) {
+      return;
+    }
+
+    // Remove existing event listeners to prevent duplicates
+    const newGuessInput = guessInput.cloneNode(true) as HTMLInputElement;
+    const newGuessButton = guessButton.cloneNode(true) as HTMLButtonElement;
+
+    guessInput.parentNode?.replaceChild(newGuessInput, guessInput);
+    guessButton.parentNode?.replaceChild(newGuessButton, guessButton);
+
     // Enter key support
-    document
-      .getElementById("guessInput")
-      ?.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-          makeGuess();
-        }
-      });
+    newGuessInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        makeGuess();
+      }
+    });
 
     // Guess button click handler
-    document
-      .getElementById("guessButton")
-      ?.addEventListener("click", makeGuess);
+    newGuessButton.addEventListener("click", makeGuess);
 
-    // Initialize game on load
+    // Initialize game
     initGame();
+  }
+
+  // Add event listeners - use only one primary method
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeGame);
+  } else {
+    // DOM already loaded
+    initializeGame();
+  }
+
+  // For Astro view transitions only
+  document.addEventListener("astro:page-load", function () {
+    // Reset flags for new page load in SPA
+    gameInitialized = false;
+    wordFetched = false;
+    initializeGame();
   });
 </script>
