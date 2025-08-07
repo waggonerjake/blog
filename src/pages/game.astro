@@ -293,14 +293,14 @@ export interface Props {
 
 <script>
   // Daily game state
-  let currentItem = {};
+  let currentItem: any = {};
   let guessesRemaining = 6;
   let hintsRemaining = 2;
   let currentHintIndex = 0;
   let gameOver = false;
-  let previousGuesses = [];
+  let previousGuesses: any[] = [];
   let hasPlayedToday = false;
-  let revealedLetters = [];
+  let revealedLetters: any[] = [];
 
   // Get today's date string for comparison
   function getTodayDateString() {
@@ -401,15 +401,35 @@ export interface Props {
 
   function updateUI() {
     // Clear previous game elements
-    document.getElementById("gameMessage").innerHTML = "";
-    document.getElementById("guessesList").style.display = "none";
-    document.getElementById("guessesContainer").innerHTML = "";
-    document.getElementById("guessInput").disabled = gameOver;
-    document.getElementById("guessButton").disabled = gameOver;
-    document.getElementById("guessInput").value = "";
+    const guessInput = document.getElementById(
+      "guessInput"
+    ) as HTMLInputElement;
+    const gameMessage = document.getElementById("gameMessage");
+    const guessesList = document.getElementById("guessesList");
+    const guessesContainer = document.getElementById("guessesContainer");
+    const guessButton = document.getElementById(
+      "guessButton"
+    ) as HTMLButtonElement;
 
-    if (!gameOver) {
-      document.getElementById("guessInput").focus();
+    if (gameMessage) {
+      gameMessage.innerHTML = "";
+    }
+    if (guessesList) {
+      guessesList.style.display = "none";
+    }
+    if (guessesContainer) {
+      guessesContainer.innerHTML = "";
+    }
+    if (guessInput) {
+      guessInput.disabled = gameOver;
+      guessInput.value = "";
+    }
+    if (guessButton) {
+      guessButton.disabled = gameOver;
+    }
+
+    if (!gameOver && guessInput) {
+      guessInput.focus();
     }
   }
 
@@ -418,7 +438,7 @@ export interface Props {
 
     const display = currentItem.word
       .split("")
-      .map((letter, index) => {
+      .map((letter: any, index: number) => {
         if (revealedLetters[index]) {
           return `<span class="correct-letter">${letter}</span>`;
         } else if (gameOver && guessesRemaining === 0) {
@@ -429,47 +449,56 @@ export interface Props {
         }
       })
       .join(" ");
-
-    document.getElementById("wordDisplay").innerHTML = display;
+    const wordDisplay = document.getElementById("wordDisplay");
+    if (wordDisplay) {
+      wordDisplay.innerHTML = display;
+    }
   }
 
   function updateStats() {
-    document.getElementById("guessesLeft").textContent = guessesRemaining;
-    document.getElementById("hintsLeft").textContent = hintsRemaining;
+    const guessesLeft = document.getElementById("guessesLeft");
+    const hintsLeft = document.getElementById("hintsLeft");
+    if (guessesLeft) {
+      guessesLeft.textContent = `${guessesRemaining}`;
+    }
+    if (hintsLeft) {
+      hintsLeft.textContent = `${hintsRemaining}`;
+    }
   }
 
   function updateHint() {
     const hintsContainer = document.getElementById("hintsContainer");
+    if (hintsContainer) {
+      // Clear existing hints
+      hintsContainer.innerHTML = "";
 
-    // Clear existing hints
-    hintsContainer.innerHTML = "";
+      // Show all hints that have been revealed so far
+      for (
+        let i = 0;
+        i <= currentHintIndex && i < currentItem.hints.length;
+        i++
+      ) {
+        const hintDiv = document.createElement("div");
+        hintDiv.className = "hint-text";
+        hintDiv.textContent = `${i + 1}. ${currentItem.hints[i]}`;
+        hintsContainer.appendChild(hintDiv);
+      }
 
-    // Show all hints that have been revealed so far
-    for (
-      let i = 0;
-      i <= currentHintIndex && i < currentItem.hints.length;
-      i++
-    ) {
-      const hintDiv = document.createElement("div");
-      hintDiv.className = "hint-text";
-      hintDiv.textContent = `${i + 1}. ${currentItem.hints[i]}`;
-      hintsContainer.appendChild(hintDiv);
-    }
-
-    // If no hints yet, show placeholder
-    if (currentHintIndex === -1) {
-      hintsContainer.innerHTML =
-        '<div class="hint-text">Make your first guess to get a hint!</div>';
+      // If no hints yet, show placeholder
+      if (currentHintIndex === -1) {
+        hintsContainer.innerHTML =
+          '<div class="hint-text">Make your first guess to get a hint!</div>';
+      }
     }
   }
 
   function makeGuess() {
     if (gameOver) return;
 
-    const guess = document
-      .getElementById("guessInput")
-      .value.trim()
-      .toUpperCase();
+    const guessInput = document.getElementById(
+      "guessInput"
+    ) as HTMLInputElement;
+    const guess = guessInput.value.trim().toUpperCase();
     if (!guess) return;
 
     // Add to previous guesses
@@ -528,15 +557,17 @@ export interface Props {
     }
 
     // Clear input
-    document.getElementById("guessInput").value = "";
-    document.getElementById("guessInput").focus();
+    if (guessInput) {
+      guessInput.value = "";
+      guessInput.focus();
+    }
   }
 
   function updateGuessesList() {
     const guessesList = document.getElementById("guessesList");
     const guessesContainer = document.getElementById("guessesContainer");
 
-    if (previousGuesses.length > 0) {
+    if (previousGuesses.length > 0 && guessesList && guessesContainer) {
       guessesList.style.display = "block";
       guessesContainer.innerHTML = previousGuesses
         .map(guess => `<div class="guess-item">${guess}</div>`)
@@ -547,20 +578,47 @@ export interface Props {
   function winGame() {
     gameOver = true;
     updateWordDisplay();
-    document.getElementById("gameMessage").innerHTML =
-      `<div class="win-message">🎉 Congratulations! You guessed "${currentItem.word}" correctly!</div>`;
-    document.getElementById("guessInput").disabled = true;
-    document.getElementById("guessButton").disabled = true;
+    const gameMessage = document.getElementById("gameMessage");
+    if (gameMessage) {
+      gameMessage.innerHTML = `<div class="win-message">🎉 Congratulations! You guessed "${currentItem.word}" correctly!</div>`;
+    }
+    const guessInput = document.getElementById(
+      "guessInput"
+    ) as HTMLInputElement | null;
+    if (guessInput) {
+      guessInput.disabled = true;
+    }
+
+    const guessButon = document.getElementById(
+      "guessButton"
+    ) as HTMLInputElement | null;
+    if (guessButon) {
+      guessButon.disabled = true;
+    }
   }
 
   function loseGame() {
     gameOver = true;
     // Don't change guessesRemaining - keep it at 0 to show user used all guesses
     updateWordDisplay(); // This will show missed letters in red
-    document.getElementById("gameMessage").innerHTML =
-      `<div class="lose-message">😔 Game Over! The answer was "${currentItem.word}". Come back tomorrow for a new word!</div>`;
-    document.getElementById("guessInput").disabled = true;
-    document.getElementById("guessButton").disabled = true;
+    const gameMessage = document.getElementById("gameMessage");
+    if (gameMessage) {
+      gameMessage.innerHTML = `<div class="lose-message">😔 Game Over! The answer was "${currentItem.word}". Come back tomorrow for a new word!</div>`;
+    }
+
+    const guessInput = document.getElementById(
+      "guessInput"
+    ) as HTMLInputElement | null;
+    if (guessInput) {
+      guessInput.disabled = true;
+    }
+
+    const guessButon = document.getElementById(
+      "guessButton"
+    ) as HTMLInputElement | null;
+    if (guessButon) {
+      guessButon.disabled = true;
+    }
   }
 
   // Add event listeners after DOM loads
@@ -568,14 +626,16 @@ export interface Props {
     // Enter key support
     document
       .getElementById("guessInput")
-      .addEventListener("keypress", function (e) {
+      ?.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
           makeGuess();
         }
       });
 
     // Guess button click handler
-    document.getElementById("guessButton").addEventListener("click", makeGuess);
+    document
+      .getElementById("guessButton")
+      ?.addEventListener("click", makeGuess);
 
     // Initialize game on load
     initGame();
