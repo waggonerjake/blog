@@ -14,11 +14,11 @@ function getEasternDate(): string {
 }
 
 export const GET: APIRoute = async () => {
+  const todayDate = getEasternDate();
   const response = await fetch(
-    "https://scs7xuuadxsagxft.public.blob.vercel-storage.com/words.json"
+    `https://scs7xuuadxsagxft.public.blob.vercel-storage.com/words.json?d=${todayDate}`
   );
   const words: any[] = await response.json();
-  const todayDate = getEasternDate();
 
   return new Response(
     JSON.stringify(words.find(word => word.date === todayDate))
