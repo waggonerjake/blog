@@ -374,7 +374,7 @@ export interface Props {
 
     try {
       const response = await fetch(
-        `http://www.jakewaggoner.com/api/get-word?d=${datestring}`
+        `https://www.jakewaggoner.com/api/get-word?d=${datestring}`
       );
       const data = await response.json();
       return data.word;
