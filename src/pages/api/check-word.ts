@@ -7,6 +7,7 @@ export const GET: APIRoute = async ({ url }) => {
   );
   const words: any = await response.json();
   const guess = url.searchParams.get("q") || "123";
-
-  return new Response(JSON.stringify({ exists: words[guess] ? true : false }));
+  return new Response(
+    JSON.stringify({ exists: words[guess.toLocaleLowerCase()] ? true : false })
+  );
 };

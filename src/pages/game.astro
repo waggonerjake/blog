@@ -132,6 +132,29 @@ export interface Props {
     margin: 30px 0;
     color: #2d3748;
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 1.2em;
+  }
+
+  /* Dynamic font sizing based on content length */
+  .word-display.long-word {
+    font-size: 2em;
+    letter-spacing: 6px;
+  }
+
+  .word-display.very-long-word {
+    font-size: 1.5em;
+    letter-spacing: 4px;
+  }
+
+  .word-display.extra-long-word {
+    font-size: 1.2em;
+    letter-spacing: 2px;
   }
 
   .hint-section {
@@ -321,6 +344,21 @@ export interface Props {
     .word-display {
       font-size: 2em;
       letter-spacing: 4px;
+    }
+
+    .word-display.long-word {
+      font-size: 1.5em;
+      letter-spacing: 3px;
+    }
+
+    .word-display.very-long-word {
+      font-size: 1.2em;
+      letter-spacing: 2px;
+    }
+
+    .word-display.extra-long-word {
+      font-size: 1em;
+      letter-spacing: 1px;
     }
 
     .guess-input {
@@ -618,6 +656,18 @@ export interface Props {
     const wordDisplay = document.getElementById("wordDisplay");
     if (wordDisplay) {
       wordDisplay.innerHTML = display;
+
+      // Add responsive classes based on word length
+      wordDisplay.className = "word-display";
+      const wordLength = currentItem.word.length;
+
+      if (wordLength >= 12) {
+        wordDisplay.classList.add("extra-long-word");
+      } else if (wordLength >= 9) {
+        wordDisplay.classList.add("very-long-word");
+      } else if (wordLength >= 7) {
+        wordDisplay.classList.add("long-word");
+      }
     }
   }
 
@@ -676,7 +726,7 @@ export interface Props {
     }
 
     const wordExists = await checkWordExists(guess);
-    if (wordExists === false) {
+    if (guess !== currentItem.word && wordExists === false) {
       showToast(`Word not found!`);
       return;
     }
