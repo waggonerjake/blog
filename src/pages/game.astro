@@ -285,6 +285,33 @@ export interface Props {
     padding: 20px;
   }
 
+  /* Toast message styles */
+  :global(.toast) {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #fed7d7, #feb2b2);
+    color: #742a2a;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    max-width: 90%;
+    text-align: center;
+  }
+
+  :global(.toast.show) {
+    opacity: 1;
+  }
+
+  :global(.toast.hide) {
+    opacity: 0;
+  }
+
   @media (max-width: 600px) {
     .game-container {
       padding: 20px;
@@ -314,10 +341,74 @@ export interface Props {
   let revealedLetters: any[] = [];
   let gameInitialized = false;
   let wordFetched = false; // Flag to prevent multiple API calls
+  let winStreak = 0;
 
-  // Get today's date string for comparison
   function getTodayDateString() {
     return new Date().toDateString();
+  }
+
+  function loadWinStreak() {
+    const savedStreak = localStorage.getItem("winStreak");
+    winStreak = savedStreak ? Number(savedStreak) : 0;
+  }
+
+  function saveWinStreak() {
+    localStorage.setItem("winStreak", `${winStreak}`);
+  }
+
+  // Show toast message
+  function showToast(message: string) {
+    // Remove any existing toast
+    const existingToast = document.querySelector(".toast");
+    if (existingToast) {
+      existingToast.remove();
+    }
+
+    // Create new toast
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    // Show toast with animation
+    setTimeout(() => {
+      toast.classList.add("show");
+    }, 10);
+
+    // Hide and remove toast after 3 seconds
+    setTimeout(() => {
+      toast.classList.remove("show");
+      toast.classList.add("hide");
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.parentNode.removeChild(toast);
+        }
+      }, 300);
+    }, 3000);
+  }
+
+  // Update win streak and handle streak logic
+  function updateWinStreak(streak: number) {
+    if (checkStreakUpdatedToday()) {
+      return;
+    }
+
+    winStreak = streak;
+
+    saveWinStreak();
+    markStreakUpdatedToday();
+  }
+
+  function checkStreakUpdatedToday() {
+    const today = getTodayDateString();
+    const lastStreakUpdate = localStorage.getItem("lastStreakUpdate");
+    return lastStreakUpdate === today;
+  }
+
+  // Mark that streak has been updated today
+  function markStreakUpdatedToday() {
+    const today = getTodayDateString();
+    localStorage.setItem("lastStreakUpdate", today);
   }
 
   // Check if user has already played today
@@ -383,11 +474,23 @@ export interface Props {
     }
   }
 
+  async function checkWordExists(guess: string) {
+    try {
+      const response = await fetch(`/api/check-word?q=${guess}`);
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error("Error fetching daily word:", error);
+    }
+  }
+
   async function initGame() {
     // Prevent multiple initializations
     if (gameInitialized) {
       return;
     }
+
+    loadWinStreak();
 
     // Check if user already played today
     if (checkDailyPlayStatus()) {
@@ -555,7 +658,7 @@ export interface Props {
     }
   }
 
-  function makeGuess() {
+  async function makeGuess() {
     if (gameOver) return;
 
     const guessInput = document.getElementById(
@@ -563,6 +666,20 @@ export interface Props {
     ) as HTMLInputElement;
     const guess = guessInput.value.trim().toUpperCase();
     if (!guess) return;
+
+    if (guess.length < currentItem.word.length) {
+      showToast(`Word is too short!`);
+      return;
+    } else if (guess.length > currentItem.word.length) {
+      showToast(`Word is too long!`);
+      return;
+    }
+
+    const wordExists = await checkWordExists(guess);
+    if (wordExists === false) {
+      showToast(`Word not found!`);
+      return;
+    }
 
     // Add to previous guesses
     previousGuesses.push(guess);
@@ -639,9 +756,13 @@ export interface Props {
   function winGame() {
     gameOver = true;
     updateWordDisplay();
+    updateWinStreak(winStreak + 1);
+
     const gameMessage = document.getElementById("gameMessage");
     if (gameMessage) {
-      gameMessage.innerHTML = `<div class="win-message">🎉 Congratulations! You guessed <div style="font-weight:bold">${currentItem.word}</div> correctly! Come back tomorrow to guess again!</div>`;
+      const streakMessage =
+        winStreak > 1 ? ` Win streak: ${winStreak}! 🔥` : "";
+      gameMessage.innerHTML = `<div class="win-message">🎉 Congratulations! You guessed <div style="font-weight:bold">${currentItem.word}</div> correctly!${streakMessage} Come back tomorrow to guess again!</div>`;
     }
     const guessInput = document.getElementById(
       "guessInput"
@@ -660,6 +781,8 @@ export interface Props {
 
   function loseGame() {
     gameOver = true;
+    updateWinStreak(0);
+
     // Don't change guessesRemaining - keep it at 0 to show user used all guesses
     updateWordDisplay(); // This will show missed letters in red
     const gameMessage = document.getElementById("gameMessage");
