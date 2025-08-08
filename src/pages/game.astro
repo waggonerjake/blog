@@ -502,9 +502,7 @@ export interface Props {
     const datestring = `${year}-${month}-${day}`;
 
     try {
-      const response = await fetch(
-        `https://www.jakewaggoner.com/api/get-word?d=${datestring}`
-      );
+      const response = await fetch(`/api/get-word?d=${datestring}`);
       const data = await response.json();
       return data.word;
     } catch (error) {
@@ -642,17 +640,18 @@ export interface Props {
 
     const display = currentItem.word
       .split("")
-      .map((letter: any, index: number) => {
+      .map((letter: string, index: number) => {
         if (revealedLetters[index]) {
-          return `<span class="correct-letter">${letter}</span>`;
+          return `<span style="display: inline-block; width: 1.2em; text-align: center; margin: 0 0.1em;" class="correct-letter">${letter}</span>`;
         } else if (gameOver && guessesRemaining === 0) {
           // Show missed letters in red when out of guesses
-          return `<span class="missed-letter">${letter}</span>`;
+          return `<span style="display: inline-block; width: 1.2em; text-align: center; margin: 0 0.1em;" class="missed-letter">${letter}</span>`;
         } else {
-          return "_";
+          return `<span style="display: inline-block; width: 1.2em; text-align: center; margin: 0 0.1em;">_</span>`;
         }
       })
-      .join(" ");
+      .join("");
+
     const wordDisplay = document.getElementById("wordDisplay");
     if (wordDisplay) {
       wordDisplay.innerHTML = display;
@@ -722,6 +721,9 @@ export interface Props {
       return;
     } else if (guess.length > currentItem.word.length) {
       showToast(`Word is too long!`);
+      return;
+    } else if (previousGuesses.includes(guess)) {
+      showToast(`Word has already been guessed!`);
       return;
     }
 
