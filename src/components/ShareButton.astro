@@ -1,0 +1,39 @@
+---
+const currentUrl = Astro.url;
+export interface Props {
+  title: string;
+}
+const { title: title = "" } = Astro.props;
+---
+
+<button
+  id="shareButton"
+  class="rounded border border-border bg-muted px-2 py-1 text-xs leading-4 font-medium text-foreground"
+  >Share This Post</button
+>
+
+<script is:inline data-astro-rerun define:vars={{ currentUrl, title }}>
+  const shareButton = document.getElementById("shareButton");
+  if (shareButton) {
+    shareButton.addEventListener("click", shareContent);
+  }
+
+  function shareContent() {
+    const shareData = {
+      title,
+      text: "Check out this cool post!",
+      url: currentUrl,
+    };
+
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .then(() => console.log("Content shared successfully!"))
+        .catch(error => console.error("Error sharing:", error));
+    } else {
+      alert(
+        "Sharing is not supported on this browser. Please copy the link manually."
+      );
+    }
+  }
+</script>

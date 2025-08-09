@@ -1,9 +1,7 @@
 import type { Props } from "astro";
-import IconMail from "@/assets/icons/IconMail.svg";
 import IconGitHub from "@/assets/icons/IconGitHub.svg";
 import IconBrandX from "@/assets/icons/IconBrandX.svg";
 import IconLinkedin from "@/assets/icons/IconLinkedin.svg";
-import IconFacebook from "@/assets/icons/IconFacebook.svg";
 import IconInstagram from "@/assets/icons/IconInstragram.svg";
 import { SITE } from "@/config";
 
@@ -38,26 +36,5 @@ export const SOCIALS: Social[] = [
     href: "https://www.instagram.com/iamjakewaggoner/",
     linkTitle: `${SITE.title} on Instagram`,
     icon: IconInstagram,
-  },
-] as const;
-
-export const SHARE_LINKS: Social[] = [
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/sharer.php?u=",
-    linkTitle: `Share this post on Facebook`,
-    icon: IconFacebook,
-  },
-  {
-    name: "X",
-    href: "https://x.com/intent/post?url=",
-    linkTitle: `Share this post on X`,
-    icon: IconBrandX,
-  },
-  {
-    name: "Mail",
-    href: "mailto:?subject=See%20this%20post&body=",
-    linkTitle: `Share this post via email`,
-    icon: IconMail,
   },
 ] as const;

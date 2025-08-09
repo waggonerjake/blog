@@ -7,7 +7,7 @@ import Tag from "@/components/Tag.astro";
 import Datetime from "@/components/Datetime.astro";
 import ReadingTime from "@/components/ReadingTime.astro";
 import EditPost from "@/components/EditPost.astro";
-import ShareLinks from "@/components/ShareLinks.astro";
+import ShareButton from "@/components/ShareButton.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import { getPath } from "@/utils/getPath";
@@ -133,7 +133,7 @@ const nextPost =
 
     <BackToTopButton />
 
-    <ShareLinks />
+    <ShareButton {title} />
 
     <hr class="my-6 border-dashed" />
 
