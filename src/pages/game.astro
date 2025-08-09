@@ -52,6 +52,7 @@ export interface Props {
     </div>
 
     <div id="gameMessage"></div>
+    <button id="shareButton" class="share-button">Share your results</button>
   </div>
 </Layout>
 
@@ -339,6 +340,7 @@ export interface Props {
     .game-container {
       padding: 20px;
       max-height: 95vh; /* Slightly higher on mobile */
+      margin-bottom: 1rem;
     }
 
     .word-display {
@@ -366,6 +368,20 @@ export interface Props {
       margin-bottom: 10px;
     }
   }
+  .share-button {
+    background-color: #008136;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+  }
+  .share-button:hover {
+    background-color: #32c06d;
+  }
 </style>
 
 <script>
@@ -380,6 +396,7 @@ export interface Props {
   let gameInitialized = false;
   let wordFetched = false; // Flag to prevent multiple API calls
   let winStreak = 0;
+  let shareGrid = "";
 
   function getTodayDateString() {
     return new Date().toDateString();
@@ -467,6 +484,7 @@ export interface Props {
       revealedLetters =
         state.revealedLetters ||
         new Array(state.currentItem.word.length).fill(false);
+      shareGrid = state.sharedGrid;
       return true;
     }
     return false;
@@ -483,14 +501,14 @@ export interface Props {
       gameOver,
       previousGuesses,
       revealedLetters,
+      shareGrid,
     };
 
     localStorage.setItem("lastPlayDate", today);
     localStorage.setItem("dailyGameState", JSON.stringify(gameState));
   }
 
-  // Fetch today's word from your API
-  async function fetchTodaysWord() {
+  function getNumericalDate() {
     const now = new Date();
     const easternTime = new Date(
       now.toLocaleString("en-US", { timeZone: "America/New_York" })
@@ -499,7 +517,12 @@ export interface Props {
     const year = easternTime.getFullYear();
     const month = String(easternTime.getMonth() + 1).padStart(2, "0");
     const day = String(easternTime.getDate()).padStart(2, "0");
-    const datestring = `${year}-${month}-${day}`;
+    return `${year}-${month}-${day}`;
+  }
+
+  // Fetch today's word from your API
+  async function fetchTodaysWord() {
+    const datestring = getNumericalDate();
 
     try {
       const response = await fetch(`/api/get-word?d=${datestring}`);
@@ -526,6 +549,11 @@ export interface Props {
       return;
     }
 
+    const shareButton = document.getElementById("shareButton");
+    if (shareButton) {
+      shareButton.addEventListener("click", shareContent);
+    }
+
     loadWinStreak();
 
     // Check if user already played today
@@ -550,8 +578,10 @@ export interface Props {
         } else {
           loseGame();
         }
+        shareButton?.classList.remove("hidden");
       } else {
-        // If game is not over, don't call updateUI() which hides the guesses
+        shareButton?.classList.add("hidden");
+
         const guessInput = document.getElementById(
           "guessInput"
         ) as HTMLInputElement;
@@ -570,6 +600,7 @@ export interface Props {
       gameInitialized = true;
       return;
     }
+    shareButton?.classList.add("hidden");
 
     // Only fetch word if we haven't already
     if (!wordFetched) {
@@ -584,6 +615,7 @@ export interface Props {
     gameOver = false;
     previousGuesses = [];
     revealedLetters = new Array(currentItem.word.length).fill(false);
+    shareGrid = "";
 
     saveDailyGameState();
 
@@ -737,30 +769,45 @@ export interface Props {
     previousGuesses.push(guess);
     updateGuessesList();
 
+    const replaceAt = (input: string, index: number, replacement: string) => {
+      return (
+        input.substring(0, index) +
+        replacement +
+        input.substring(index + replacement.length)
+      );
+    };
+
     // Check for correct letters in correct positions
     if (guess !== currentItem.word) {
-      for (
-        let i = 0;
-        i < Math.min(guess.length, currentItem.word.length);
-        i++
-      ) {
+      let currentGuess = "";
+      for (let i = 0; i < currentItem.word.length; i++) {
         if (guess[i] === currentItem.word[i] && !revealedLetters[i]) {
           revealedLetters[i] = true;
         }
+        currentGuess += "❌";
+        if (guess[i] === currentItem.word[i]) {
+          currentGuess = replaceAt(currentGuess, i, "✅");
+        }
       }
+      shareGrid = `${shareGrid}${currentGuess}\n`;
       updateWordDisplay();
     }
+
+    const shareButton = document.getElementById("shareButton");
 
     // Check if correct
     if (guess === currentItem.word) {
       // Reveal all letters for complete word
       revealedLetters = new Array(currentItem.word.length).fill(true);
+      shareGrid = `${shareGrid}${revealedLetters.reduce((accum, curr) => accum + "✅", "")}\n`;
+      guessesRemaining--;
       updateWordDisplay();
+      updateStats();
       winGame();
       saveDailyGameState();
+      shareButton?.classList.remove("hidden");
       return;
     }
-
     // Reduce guesses
     guessesRemaining--;
 
@@ -783,6 +830,7 @@ export interface Props {
     if (guessesRemaining === 0) {
       loseGame();
       saveDailyGameState();
+      shareButton?.classList.remove("hidden");
       return;
     }
 
@@ -854,6 +902,23 @@ export interface Props {
     ) as HTMLInputElement | null;
     if (guessButton) {
       guessButton.disabled = true;
+    }
+  }
+
+  function shareContent() {
+    const shareData = {
+      text: `What's in my house? ${getNumericalDate()}\n\n${shareGrid}\nPlay at https://www.jakewaggoner.com/game`,
+    };
+
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .then(() => console.log("Content shared successfully!"))
+        .catch(error => console.error("Error sharing:", error));
+    } else {
+      alert(
+        "Sharing is not supported on this browser. Please copy the link manually."
+      );
     }
   }
 
