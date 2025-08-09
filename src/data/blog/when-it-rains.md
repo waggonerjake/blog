@@ -1,7 +1,7 @@
 ---
 author: Jake Waggoner
 pubDatetime: 2025-07-28T19:26:05.000-04:00
-modDatetime:
+modDatetime: 2025-08-09T00:46:48
 title: When it rains, it pours
 featured: false
 draft: false
@@ -22,7 +22,7 @@ Owning a home definitely comes with it perks and I am extremely lucky to be able
 
 ## Synopsis
 
-It seems whenever I have a big event going on or something expensive planned, another event happens immediately after that was unplanned. Below I state some examples of this happening, some are more worse than others but everything ended up working out in the end. That is what im most grateful for. My wife and I have built ourselves a serious security blanket for unplanned events and thankfully its never been truly terrible. However, the repeated pattern of terrible timing is just ridiculous. It hasnt always been like this, it only started happening once we bought our house. Goes to show being a home owner isn't always the most fun and definitely not the cheapest thing. It definitely helps to look at the age of the major systems in your home before buying and plan ahead for future repairs/replacements. When we bought our home, this was the age of our systems:
+It seems whenever I have a big event going on or something expensive planned, another event happens immediately after that was unplanned. Below I state some examples of this happening, some are more worse than others but everything ended up working out in the end. That is what im most grateful for. My wife and I have built ourselves a serious security blanket for unplanned events and thankfully its never been truly terrible. However, the repeated pattern of terrible timing is just ridiculous. It hasn't always been like this, it only started happening once we bought our house. Goes to show being a home owner isn't always the most fun and definitely not the cheapest thing. It definitely helps to look at the age of the major systems in your home before buying and plan ahead for future repairs/replacements. When we bought our home, this was the age of our systems:
 
 - AC: 20 years old (2002)
 - Water Heater: 10 years old (2012)\* | Originally, our home inspector said it was from 2017 but upon further inspection that was incorrect
