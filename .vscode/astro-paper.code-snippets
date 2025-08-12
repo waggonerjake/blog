@@ -25,6 +25,8 @@
       "",
       "${2: Introductory Sentence}",
       "",
+      "<figure><img src=\"/assets/my_pic.jpg\" alt=\"my_pic\" /><figcaption class=\"text-center\">my_pic</figcaption></figure>",
+      "",
       "## Table of contents",
       "",
       "## ${3: heading 1}",

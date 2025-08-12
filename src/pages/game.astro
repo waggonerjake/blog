@@ -495,11 +495,11 @@ export interface Props {
       hintsRemaining = state.hintsRemaining;
       currentHintIndex = state.currentHintIndex;
       gameOver = state.gameOver;
-      previousGuesses = state.previousGuesses || []; // Fixed: ensure array fallback
+      previousGuesses = state.previousGuesses || [];
       revealedLetters =
         state.revealedLetters ||
         new Array(state.currentItem.word.length).fill(false);
-      shareGrid = state.sharedGrid;
+      shareGrid = state.sharedGrid || "";
       return true;
     }
     return false;
