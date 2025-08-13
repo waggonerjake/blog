@@ -570,6 +570,16 @@ export interface Props {
     }
 
     loadWinStreak();
+    if (winStreak > 0) {
+      const lastStreakUpdate =
+        localStorage.getItem("lastStreakUpdate") ||
+        new Date("1998-12-18").toDateString();
+      let yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      if (yesterday.toDateString() > lastStreakUpdate) {
+        winStreak = 0;
+      }
+    }
 
     // Check if user already played today
     if (checkDailyPlayStatus()) {
@@ -877,7 +887,7 @@ export interface Props {
     if (gameMessage) {
       const streakMessage =
         winStreak > 1 ? ` Win streak: ${winStreak}! 🔥` : "";
-      gameMessage.innerHTML = `<div class="win-message">🎉 Congratulations! You guessed <div style="font-weight:bold">${currentItem.word}</div> correctly!${streakMessage} Come back tomorrow to guess again!</div>`;
+      gameMessage.innerHTML = `<div class="win-message">🎉 Congratulations! You guessed <span style="font-weight:bold">${currentItem.word}</span> correctly! <div style="font-weight:bold">${streakMessage}</div> Come back tomorrow to guess again!</div>`;
     }
     const guessInput = document.getElementById(
       "guessInput"
