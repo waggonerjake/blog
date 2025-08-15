@@ -1,7 +1,7 @@
 ---
 author: Jake Waggoner
 pubDatetime: 2025-08-10T22:05:46.000-04:00
-modDatetime:
+modDatetime: 2025-08-15T00:08:24
 title: Garage Workbench
 featured: false
 draft: false
@@ -18,7 +18,7 @@ Shortly after moving into home, I came to the realization I needed a workbench n
   <figcaption class="text-center">My Workbench</figcaption>
 </figure>
 
-For starters, I am mostly happy with this workbench, it gets the job done. However, the bench top should probably be replaced. As of now, it is just 4 2x8s cut to length and equal width which would be fine except the boards I got were not very good quality and are warped thus leading to a non-flat bench top. I think if (when?) I redo the top I will just replace it with 3/4" plywood instead.
+For starters, I am mostly happy with this workbench, it gets the job done. However, the bench top should probably be replaced. As of now, it is just 4 2x8s cut to length and equal width. Normally, this would be fine except the boards I got were not very good quality and are warped, thus leading to a non-flat bench top. I think if (when?) I redo the top I will just replace it with 3/4" plywood instead.
 
 ## Inspiration
 
