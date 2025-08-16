@@ -576,7 +576,7 @@ export interface Props {
         new Date("1998-12-18").toDateString();
       let yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-      if (yesterday.toDateString() > lastStreakUpdate) {
+      if (Date.parse(yesterday.toDateString()) > Date.parse(lastStreakUpdate)) {
         winStreak = 0;
       }
     }
