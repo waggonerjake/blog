@@ -1,7 +1,7 @@
 ---
 author: Jake Waggoner
 pubDatetime: 2025-08-03T00:28:40
-modDatetime:
+modDatetime: 2025-08-29T23:00:48
 title: QoL Home Improvement Items
 featured: true
 draft: false
@@ -146,3 +146,12 @@ In the kitchen, we added an automatic soap dispenser by the sink so if our hands
 </figure>
 
 A little handheld vacuum is super nice to have for small spills or messes around the house. Instead of lugging around the big vacuum and dealing with the cord, this little vacuum is rechargeable and is lightweight. We mainly use this for quick cleans and vacuuming the couch or other seats. This particular model lets you suck up liquids too, so if you spill something you can use this instead of a paper towel if you choose. You can find these type of vacuums for super cheap, I bought this one for $45.
+
+## Chicken Shredder
+
+<figure>
+  <img src="https://m.media-amazon.com/images/I/71Fl0mK2XLL._AC_SL1500_.jpg" alt="Chicken Shredder" class="sm:h-1/2 sm:w-1/2"/>
+  <figcaption class="text-center">Chicken Shredder</figcaption>
+</figure>
+
+Shredding chicken sucks when you just have 2 forks to do it. It takes forever and the pieces are never even. I saw this awesome chicken shredder online and thought it would be a huge time saver. The one I got was on amazon, which can be found [here](https://www.amazon.com/dp/B0CJN8ZWL1?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1). This thing works great and the best part is its dishwasher safe. This works by having a fixed base you set the meat in, place the top and push down until its flush, then spin the top around until the meat is shredded to the desired consistency. The only down side to this is getting the chicken out of it after its been shredded. Due to the spikes, you cant just scrape it in 1 continuous line. However, I have found the easiest way to get it out is to just dump it into a large bowl, but then thats another dish that has to be cleaned.
